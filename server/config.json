@@ -1,0 +1,9 @@
+{
+  "rds_host": "littlepark.cvyugi84a7zv.us-east-1.rds.amazonaws.com",
+  "rds_port": "3306",
+  "rds_user": "littlepark",
+  "rds_password": "littlepark123",
+  "rds_db": "littlepark",
+  "server_host": "localhost",
+  "server_port": "8080"
+}
