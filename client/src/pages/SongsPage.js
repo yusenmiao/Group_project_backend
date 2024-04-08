@@ -38,6 +38,14 @@ export default function SongsPage() {
   const [Fall, setFall] = useState(false);
   const [Winter, setWinter] = useState(false);
 
+  const [Recreation, setRecreation] = useState(false);
+  const [Nonrecreation, setNonrecreation] = useState(false);
+  const [Concessioner, setConcessioner] = useState(false);
+  const [Tent, setTent] = useState(false);
+  const [RV, setRV] = useState(false);
+  const [Backcountry, setBackcountry] = useState(false);
+  const [Overnightstays, setOvernightstays] = useState(false);
+
   useEffect(() => {
     fetch(`http://${config.server_host}:${config.server_port}/search_parks`)
       .then((res) => res.json())
@@ -53,12 +61,15 @@ export default function SongsPage() {
   const search = () => {
     fetch(
       `http://${config.server_host}:${config.server_port}/search_parks?name=${name}` +
-        `&Temperature_low=${Temperature[0]}&Temperature_high=${Temperature[1]}` + 
+        `&Temperature_low=${Temperature[0]}` + `&Temperature_high=${Temperature[1]}` + 
         `&Alaska=${Alaska}` + `&Intermountain=${Intermountain}` +`&Midwest=${Midwest}` +
         `&National_Capital=${National_Capital}` + `&Northeast=${Northeast}` + 
         `&Pacific_West=${Pacific_West}` +  `&Southeast=${Southeast}` +
         `&Spring=${Spring}` + `&Summer=${Summer}` + 
-        `&Fall=${Fall}` +  `&Winter=${Winter}`
+        `&Fall=${Fall}` +  `&Winter=${Winter}`+ `&Recreation=${Recreation}` + 
+        `&Nonrecreation=${Nonrecreation}` +  `&Concessioner=${Concessioner}` +
+        `&Tent=${Tent}` + `&RV=${RV}` + 
+        `&Backcountry=${Backcountry}` +  `&Overnightstays=${Overnightstays}`
       // `&plays_low=${plays[0]}&plays_high=${plays[1]}` +
       // `&danceability_low=${danceability[0]}&danceability_high=${danceability[1]}` +
       // `&energy_low=${energy[0]}&energy_high=${energy[1]}` +
@@ -249,6 +260,83 @@ export default function SongsPage() {
             }
           />
         </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Recreation"
+            control={
+              <Checkbox
+                checked={Recreation}
+                onChange={(e) => setRecreation(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Nonrecreation"
+            control={
+              <Checkbox
+                checked={Nonrecreation}
+                onChange={(e) => setNonrecreation(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Concessioner"
+            control={
+              <Checkbox
+                checked={Concessioner}
+                onChange={(e) => setConcessioner(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Tent"
+            control={
+              <Checkbox
+                checked={Tent}
+                onChange={(e) => setTent(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="RV"
+            control={
+              <Checkbox
+                checked={RV}
+                onChange={(e) => setRV(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Backcountry"
+            control={
+              <Checkbox
+                checked={Backcountry}
+                onChange={(e) => setBackcountry(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Overnightstays"
+            control={
+              <Checkbox
+                checked={Overnightstays}
+                onChange={(e) => setOvernightstays(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
         <Grid item xs={6}>
           <p>Temperature</p>
           <Slider
@@ -261,7 +349,7 @@ export default function SongsPage() {
             // valueLabelFormat={(value) => <div>{formatTemperature(value)}</div>}
           />
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <p>Plays (millions)</p>
           <Slider
             value={plays}
@@ -272,10 +360,10 @@ export default function SongsPage() {
             valueLabelDisplay="auto"
             valueLabelFormat={(value) => <div>{value / 1000000}</div>}
           />
-        </Grid>
+        </Grid> */}
         {/* TODO (TASK 24): add sliders for danceability, energy, and valence (they should be all in the same row of the Grid) */}
         {/* Hint: consider what value xs should be to make them fit on the same row. Set max, min, and a reasonable step. Is valueLabelFormat is necessary? */}
-        <Grid item xs={4}>
+        {/* <Grid item xs={4}>
           <p>Danceability</p>
           <Slider
             value={danceability}
@@ -310,7 +398,7 @@ export default function SongsPage() {
             valueLabelDisplay="auto"
             valueLabelFormat={(value) => <div>{value}</div>}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <Button
         onClick={() => search()}

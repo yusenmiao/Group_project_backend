@@ -156,7 +156,7 @@ const search_parks = async function (req, res) {
   const Summer_Month = req.query.Summer === "true" ? ['6','7','8'] : '';
   const Fall_Month = req.query.Fall === "true" ? ['9','10','11'] : '';
   const Winter_Month = req.query.Winter === "true" ? ['12','1','2'] : '';
-  if (!Spring_Month && !Summer_Month && !Fall_Month && !Winter_Month) {
+  if (!Spring_Month && !Summer_Month && !Fall_Month && !Winter_Month) {    
     all_season_Month = ['3','4','5',
                   '6','7','8',
                   '9','10','11',
@@ -166,7 +166,20 @@ const search_parks = async function (req, res) {
     all_season_Month = ['','','','','','','','','','','',''];
   }
 
+  const Recreation = req.query.Recreation === "true" ? ['recreation_visits'] : ['0'];
+  const Nonrecreation = req.query.Nonrecreation === "true" ? ['nonrecreation_visits','nonrecreation_hours'] : ['0','0'];
+  const Concessioner = req.query.Concessioner === "true" ? ['concessioner_lodging', 'concessioner_camping'] : ['0','0'];
+  const Tent = req.query.Tent === "true" ? ['tent_campers'] : ['0'];
+  const RV = req.query.RV === "true" ? ['RV_campers'] : ['0'];
+  const Backcountry = req.query.Backcountry === "true" ? ['backcountry'] : ['0'];
+  const Overnightstays = req.query.Overnightstays === "true" ? ['nonrecreation_overnightstays', 'miscellaneous_overnightstays'] : ['0','0'];
 
+  if (req.query.Recreation !== "true" &&  req.query.Nonrecreation !== "true" &&  req.query.Concessioner !== "true" &&  req.query.Tent  !== "true"  &&  req.query.RV !== "true" &&  req.query.Backcountry !== "true" &&  req.query.Overnightstays !== "true") {
+    all_activities = ['recreation_visits']
+    ;
+  } else {
+    all_activities = ['0'];
+  }
 
   // const playsLow = req.query.plays_low ?? 0;
   // const playsHigh = req.query.plays_high ?? 1100000000;
@@ -185,14 +198,29 @@ const search_parks = async function (req, res) {
         p.pid,
         p.full_name,
         p.region,
-        round(avg(v.recreation_visits),0) as visitor_count,
+        round(avg(recreation_visits + nonrecreation_visits + 
+          nonrecreation_hours + concessioner_lodging + 
+          concessioner_camping + tent_campers + 
+          RV_campers + backcountry + nonrecreation_overnightstays +
+          miscellaneous_overnightstays + all_activities
+         ),0) as visitor_count,
         # count(distinct a.sid) as animal_count,
         round(avg(w.temperature_mean),1) as avg_temper
     FROM park p
     join (
         select
             pid,
-            recreation_visits
+            ${Recreation[0]} AS recreation_visits, 
+            ${Nonrecreation[0]} AS nonrecreation_visits, 
+            ${Nonrecreation[1]} AS nonrecreation_hours, 
+            ${Concessioner[0]} AS concessioner_lodging, 
+            ${Concessioner[1]} AS concessioner_camping, 
+            ${Tent[0]} AS tent_campers, 
+            ${RV[0]} AS RV_campers, 
+            ${Backcountry[0]} AS backcountry, 
+            ${Overnightstays[0]} AS nonrecreation_overnightstays, 
+            ${Overnightstays[1]} AS miscellaneous_overnightstays,
+            ${all_activities[0]} AS all_activities
         from visitor
         where year = 2023
         and  Month in ('${Spring_Month[0]}',
