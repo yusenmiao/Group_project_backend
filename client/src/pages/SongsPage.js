@@ -20,13 +20,23 @@ export default function SongsPage() {
   const [data, setData] = useState([]);
   const [selectedSongId, setSelectedSongId] = useState(null);
 
-  const [title, setTitle] = useState("");
-  const [duration, setDuration] = useState([1, 6]);
+  const [name, setName] = useState("");
+  const [Temperature, setTemperature] = useState([-10, 40]);
   const [plays, setPlays] = useState([0, 1100000000]);
   const [danceability, setDanceability] = useState([0, 1]);
   const [energy, setEnergy] = useState([0, 1]);
   const [valence, setValence] = useState([0, 1]);
-  const [explicit, setExplicit] = useState(false);
+  const [Alaska, setAlaska] = useState(false);
+  const [Intermountain, setIntermountain] = useState(false);
+  const [Midwest, setMidwest] = useState(false);
+  const [National_Capital, setNational_Capital] = useState(false);
+  const [Northeast, setNortheast] = useState(false);
+  const [Pacific_West, setPacific_West] = useState(false);
+  const [Southeast, setSoutheast] = useState(false);
+  const [Spring, setSpring] = useState(false);
+  const [Summer, setSummer] = useState(false);
+  const [Fall, setFall] = useState(false);
+  const [Winter, setWinter] = useState(false);
 
   useEffect(() => {
     fetch(`http://${config.server_host}:${config.server_port}/search_parks`)
@@ -42,8 +52,13 @@ export default function SongsPage() {
 
   const search = () => {
     fetch(
-      `http://${config.server_host}:${config.server_port}/search_parks?title=${title}` +
-        `&duration_low=${duration[0]}&duration_high=${duration[1]}`
+      `http://${config.server_host}:${config.server_port}/search_parks?name=${name}` +
+        `&Temperature_low=${Temperature[0]}&Temperature_high=${Temperature[1]}` + 
+        `&Alaska=${Alaska}` + `&Intermountain=${Intermountain}` +`&Midwest=${Midwest}` +
+        `&National_Capital=${National_Capital}` + `&Northeast=${Northeast}` + 
+        `&Pacific_West=${Pacific_West}` +  `&Southeast=${Southeast}` +
+        `&Spring=${Spring}` + `&Summer=${Summer}` + 
+        `&Fall=${Fall}` +  `&Winter=${Winter}`
       // `&plays_low=${plays[0]}&plays_high=${plays[1]}` +
       // `&danceability_low=${danceability[0]}&danceability_high=${danceability[1]}` +
       // `&energy_low=${energy[0]}&energy_high=${energy[1]}` +
@@ -107,33 +122,143 @@ export default function SongsPage() {
       <Grid container spacing={6}>
         <Grid item xs={8}>
           <TextField
-            label="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            label="Park Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             style={{ width: "100%" }}
           />
         </Grid>
         <Grid item xs={4}>
           <FormControlLabel
-            label="Explicit"
+            label="Alaska"
             control={
               <Checkbox
-                checked={explicit}
-                onChange={(e) => setExplicit(e.target.checked)}
+                checked={Alaska}
+                onChange={(e) => setAlaska(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Intermountain"
+            control={
+              <Checkbox
+                checked={Intermountain}
+                onChange={(e) => setIntermountain(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Midwest"
+            control={
+              <Checkbox
+                checked={Midwest}
+                onChange={(e) => setMidwest(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="National Capital"
+            control={
+              <Checkbox
+                checked={National_Capital}
+                onChange={(e) => setNational_Capital(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Northeast"
+            control={
+              <Checkbox
+                checked={Northeast}
+                onChange={(e) => setNortheast(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}> 
+          <FormControlLabel
+            label="Pacific West"
+            control={
+              <Checkbox
+                checked={Pacific_West}
+                onChange={(e) => setPacific_West(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Southeast"
+            control={
+              <Checkbox
+                checked={Southeast}
+                onChange={(e) => setSoutheast(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Spring"
+            control={
+              <Checkbox
+                checked={Spring}
+                onChange={(e) => setSpring(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Summer"
+            control={
+              <Checkbox
+                checked={Summer}
+                onChange={(e) => setSummer(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Fall"
+            control={
+              <Checkbox
+                checked={Fall}
+                onChange={(e) => setFall(e.target.checked)}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            label="Winter"
+            control={
+              <Checkbox
+                checked={Winter}
+                onChange={(e) => setWinter(e.target.checked)}
               />
             }
           />
         </Grid>
         <Grid item xs={6}>
-          <p>Month</p>
+          <p>Temperature</p>
           <Slider
-            value={duration}
-            min={1}
-            max={12}
+            value={Temperature}
+            min={-10}
+            max={40}
             step={1}
-            onChange={(e, newValue) => setDuration(newValue)}
+            onChange={(e, newValue) => setTemperature(newValue)}
             valueLabelDisplay="auto"
-            // valueLabelFormat={(value) => <div>{formatDuration(value)}</div>}
+            // valueLabelFormat={(value) => <div>{formatTemperature(value)}</div>}
           />
         </Grid>
         <Grid item xs={6}>

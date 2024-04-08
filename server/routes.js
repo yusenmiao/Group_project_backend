@@ -63,7 +63,7 @@ const top_parks = async function (req, res) {
       group by p.pid, p.full_name, p.region)
 
       select
-      *
+        *
       from base
       order by visitor_count desc
       `,
@@ -87,8 +87,8 @@ const top_parks = async function (req, res) {
         p.region,
         round(avg(recreation_visits) ,0) as visitor_count
       FROM park p
-                join visitor v
-                    on p.pid = v.pid
+      join visitor v
+          on p.pid = v.pid
       WHERE v.year = 2023
       #      and p.full_name like '%Yosemite%'
       group by p.pid, p.full_name, p.region)
@@ -115,9 +115,59 @@ const top_parks = async function (req, res) {
 const search_parks = async function (req, res) {
   // TODO (TASK 12): return all songs that match the given search query with parameters defaulted to those specified in API spec ordered by title (ascending)
   // Some default parameters have been provided for you, but you will need to fill in the rest
-  const title = req.query.title ?? "%";
-  const durationLow = req.query.duration_low ?? 1;
-  const durationHigh = req.query.duration_high ?? 6;
+  const name = req.query.name ?? "%";
+  const TemperatureLow = req.query.Temperature_low ?? 1;
+  const TemperatureHigh = req.query.Temperature_high ?? 32;
+  const Alaska = req.query.Alaska === "true" ? 'Alaska' : '';
+  const Intermountain = req.query.Intermountain === "true" ? 'Intermountain' : '';
+  const Midwest = req.query.Midwest === "true" ? 'Midwest' : '';
+  const National_Capital = req.query.National_Capital === "true" ? 'National Capital' : '';
+  const Northeast = req.query.Northeast === "true" ? 'Northeast' : '';
+  const Pacific_West = req.query.Pacific_West === "true" ? 'Pacific West' : '';
+  const Southeast = req.query.Southeast === "true" ? 'Southeast' : '';
+  var all_region = '';
+  if (!Alaska && !Intermountain && !Midwest && !National_Capital && !Northeast && !Pacific_West && !Southeast) {
+      all_region = ['Alaska',
+      'Intermountain ',
+      'Midwest ',
+      'National Capital ',
+      'Northeast ',
+      'Pacific West ',
+      'Southeast ']
+      ;
+  } else {
+      all_region = ['', '', '', '', '', '', ''];
+  }
+  const Spring = req.query.Spring === "true" ? ['2023-03','2023-04','2023-05'] : '';
+  const Summer = req.query.Summer === "true" ? ['2023-06','2023-07','2023-08'] : '';
+  const Fall = req.query.Fall === "true" ? ['2023-09','2023-10','2023-11'] : '';
+  const Winter = req.query.Winter === "true" ? ['2023-12','2023-01','2023-02'] : '';
+  if (!Spring && !Summer && !Fall && !Winter) {
+    all_season = ['2023-03','2023-04','2023-05',
+                  '2023-06','2023-07','2023-08',
+                  '2023-09','2023-10','2023-11',
+                  '2023-12','2023-01','2023-02']
+    ;
+  } else {
+    all_season = ['','','','','','','','','','','',''];
+  }
+
+  const Spring_Month = req.query.Spring === "true" ? ['3','4','5'] : '';
+  const Summer_Month = req.query.Summer === "true" ? ['6','7','8'] : '';
+  const Fall_Month = req.query.Fall === "true" ? ['9','10','11'] : '';
+  const Winter_Month = req.query.Winter === "true" ? ['12','1','2'] : '';
+  if (!Spring_Month && !Summer_Month && !Fall_Month && !Winter_Month) {
+    all_season_Month = ['3','4','5',
+                  '6','7','8',
+                  '9','10','11',
+                  '12','1','2']
+    ;
+  } else {
+    all_season_Month = ['','','','','','','','','','','',''];
+  }
+
+
+
   // const playsLow = req.query.plays_low ?? 0;
   // const playsHigh = req.query.plays_high ?? 1100000000;
   // const danceabilityLow = req.query.danceability_low ?? 0;
@@ -126,16 +176,17 @@ const search_parks = async function (req, res) {
   // const energyHigh = req.query.energy_high ?? 1;
   // const valenceLow = req.query.valence_low ?? 0;
   // const valenceHigh = req.query.valence_high ?? 1;
-  // const explicit = req.query.explicit === "true" ? 1 : 0;
+ 
 
   connection.query(
     `
+    WITH base_t as (
     SELECT
         p.pid,
         p.full_name,
         p.region,
         round(avg(v.recreation_visits),0) as visitor_count,
-        count(distinct a.sid) as animal_count,
+        # count(distinct a.sid) as animal_count,
         round(avg(w.temperature_mean),1) as avg_temper
     FROM park p
     join (
@@ -144,29 +195,95 @@ const search_parks = async function (req, res) {
             recreation_visits
         from visitor
         where year = 2023
-        and Month between 7 AND 8
+        and  Month in ('${Spring_Month[0]}',
+                      '${Spring_Month[1]}',
+                      '${Spring_Month[2]}',
+                      '${Summer_Month[0]}',
+                      '${Summer_Month[1]}',
+                      '${Summer_Month[2]}',
+                      '${Fall_Month[0]}',
+                      '${Fall_Month[1]}',
+                      '${Fall_Month[2]}',
+                      '${Winter_Month[0]}',
+                      '${Winter_Month[1]}',
+                      '${Winter_Month[2]}',
+                      '${all_season_Month[0]}',
+                      '${all_season_Month[1]}',
+                      '${all_season_Month[3]}',
+                      '${all_season_Month[2]}',
+                      '${all_season_Month[4]}',
+                      '${all_season_Month[5]}',
+                      '${all_season_Month[6]}',
+                      '${all_season_Month[7]}',
+                      '${all_season_Month[8]}',
+                      '${all_season_Month[9]}',
+                      '${all_season_Month[10]}',
+                      '${all_season_Month[11]}')
     ) v
         on p.pid = v.pid
-    join (
-        select
-            distinct pid,
-            sid
-        from animal
-        where evidence_sum>2
-        and abundance in ('Common', 'Abundant')
-    ) a
-    on p.pid=a.pid
+#      join (
+#         select
+#             distinct pid,
+#             sid
+#         from animal
+#         where evidence_sum>2
+#         and abundance in ('Common', 'Abundant')
+#     ) a
+    # on p.pid=a.pid
     join (
         select
             pid,
             temperature_mean
         from weather
-        where date between '2023-08-01' and '2023-08-15'
+        where left(date, 7) in ('${Spring[0]}',
+        '${Spring[1]}',
+        '${Spring[2]}',
+        '${Summer[0]}',
+        '${Summer[1]}',
+        '${Summer[2]}',
+        '${Fall[0]}',
+        '${Fall[1]}',
+        '${Fall[2]}',
+        '${Winter[0]}',
+        '${Winter[1]}',
+        '${Winter[2]}',
+        '${all_season[0]}',
+        '${all_season[1]}',
+        '${all_season[2]}',
+        '${all_season[3]}',
+        '${all_season[4]}',
+        '${all_season[5]}',
+        '${all_season[6]}',
+        '${all_season[7]}',
+        '${all_season[8]}',
+        '${all_season[9]}',
+        '${all_season[10]}',
+        '${all_season[11]}')
     ) w
-    on p.pid = w.pid
-    WHERE  p.full_name like '%${title}%'
+    ON p.pid = w.pid 
+    WHERE  p.full_name like '%${name}%'
+    AND p.region in ('${Alaska}',
+                '${Intermountain} ',
+                '${Midwest} ',
+                '${National_Capital} ',
+                '${Northeast} ',
+                '${Pacific_West} ',
+                '${Southeast} ' ,
+                '${all_region[0]}',
+                '${all_region[1]}',
+                '${all_region[2]}',
+                '${all_region[3]}',
+                '${all_region[4]}',
+                '${all_region[5]}',
+                '${all_region[6]}'
+                )
     group by p.pid, p.full_name, p.region
-    order by full_name
+              )
+    SELECT
+      *
+    FROM base_t
+    WHERE avg_temper Between ${TemperatureLow} AND ${TemperatureHigh}
+    ORDER BY full_name
     `,
     (err, data) => {
       if (err || data.length === 0) {
@@ -175,7 +292,7 @@ const search_parks = async function (req, res) {
       } else {
         res.json(data);
       }
-    }
+    } 
   );
 };
 
@@ -187,7 +304,7 @@ const search_parks = async function (req, res) {
 
 //   console.log("The passed park is:");
 //   console.log(park);
-
+ 
 //   connection.query(
 //     `
 //     SELECT
