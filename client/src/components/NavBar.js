@@ -37,8 +37,8 @@ export default function NavBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <NavText href="/" text="Little Park" isMain />
-          <NavText href="/albums" text="ALBUMS" />
-          <NavText href="/songs" text="SONGS" />
+          <NavText href="/albums" text="Park" />
+          <NavText href="/songs" text="Home" />
         </Toolbar>
       </Container>
     </AppBar>

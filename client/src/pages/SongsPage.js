@@ -38,13 +38,10 @@ export default function SongsPage() {
   const [Fall, setFall] = useState(false);
   const [Winter, setWinter] = useState(false);
 
-  const [Recreation, setRecreation] = useState(false);
-  const [Nonrecreation, setNonrecreation] = useState(false);
-  const [Concessioner, setConcessioner] = useState(false);
+  const [Camp, setCamp] = useState(false);
   const [Tent, setTent] = useState(false);
   const [RV, setRV] = useState(false);
-  const [Backcountry, setBackcountry] = useState(false);
-  const [Overnightstays, setOvernightstays] = useState(false);
+
 
   useEffect(() => {
     fetch(`http://${config.server_host}:${config.server_port}/search_parks`)
@@ -66,10 +63,8 @@ export default function SongsPage() {
         `&National_Capital=${National_Capital}` + `&Northeast=${Northeast}` + 
         `&Pacific_West=${Pacific_West}` +  `&Southeast=${Southeast}` +
         `&Spring=${Spring}` + `&Summer=${Summer}` + 
-        `&Fall=${Fall}` +  `&Winter=${Winter}`+ `&Recreation=${Recreation}` + 
-        `&Nonrecreation=${Nonrecreation}` +  `&Concessioner=${Concessioner}` +
-        `&Tent=${Tent}` + `&RV=${RV}` + 
-        `&Backcountry=${Backcountry}` +  `&Overnightstays=${Overnightstays}`
+        `&Fall=${Fall}` +  `&Winter=${Winter}`+ `&Camp=${Camp}` + 
+        `&Tent=${Tent}` + `&RV=${RV}` 
       // `&plays_low=${plays[0]}&plays_high=${plays[1]}` +
       // `&danceability_low=${danceability[0]}&danceability_high=${danceability[1]}` +
       // `&energy_low=${energy[0]}&energy_high=${energy[1]}` +
@@ -262,37 +257,16 @@ export default function SongsPage() {
         </Grid>
         <Grid item xs={4}>
           <FormControlLabel
-            label="Recreation"
+            label="Camping"
             control={
               <Checkbox
-                checked={Recreation}
-                onChange={(e) => setRecreation(e.target.checked)}
+                checked={Camp}
+                onChange={(e) => setCamp(e.target.checked)}
               />
             }
           />
         </Grid>
-        <Grid item xs={4}>
-          <FormControlLabel
-            label="Nonrecreation"
-            control={
-              <Checkbox
-                checked={Nonrecreation}
-                onChange={(e) => setNonrecreation(e.target.checked)}
-              />
-            }
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <FormControlLabel
-            label="Concessioner"
-            control={
-              <Checkbox
-                checked={Concessioner}
-                onChange={(e) => setConcessioner(e.target.checked)}
-              />
-            }
-          />
-        </Grid>
+        
         <Grid item xs={4}>
           <FormControlLabel
             label="Tent"
@@ -315,28 +289,7 @@ export default function SongsPage() {
             }
           />
         </Grid>
-        <Grid item xs={4}>
-          <FormControlLabel
-            label="Backcountry"
-            control={
-              <Checkbox
-                checked={Backcountry}
-                onChange={(e) => setBackcountry(e.target.checked)}
-              />
-            }
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <FormControlLabel
-            label="Overnightstays"
-            control={
-              <Checkbox
-                checked={Overnightstays}
-                onChange={(e) => setOvernightstays(e.target.checked)}
-              />
-            }
-          />
-        </Grid>
+        
         <Grid item xs={6}>
           <p>Temperature</p>
           <Slider
