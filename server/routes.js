@@ -42,44 +42,10 @@ const park = async function (req, res) {
 // Route 2: GET /top_parks
 const top_parks = async function (req, res) {
   const page = req.query.page;
-  // TODO (TASK 8): use the ternary (or nullish) operator to set the pageSize based on the query or default to 10
-  const pageSize = req.query.page_size ?? 10;
+  
+  const pageSize = 10;
 
-  if (!page) {
-    // TODO (TASK 9)): query the database and return all songs ordered by number of plays (descending)
-    // Hint: you will need to use a JOIN to get the album title as well
-    connection.query(
-      `
-      with base as (SELECT 
-        p.pid,
-        p.full_name,
-        p.region,
-        round(avg(recreation_visits),0) as visitor_count
-      FROM park p
-                join visitor v
-                    on p.pid = v.pid
-      WHERE v.year = 2023
-      #      and p.full_name like '%Yosemite%'
-      group by p.pid, p.full_name, p.region)
-
-      select
-        *
-      from base
-      order by visitor_count desc
-      `,
-      (err, data) => {
-        if (err || data.length === 0) {
-          console.log(err);
-          res.json({});
-        } else {
-          res.json(data);
-        }
-      }
-    );
-  } else {
-    // TODO (TASK 10): reimplement TASK 9 with pagination
-    // Hint: use LIMIT and OFFSET (see https://www.w3schools.com/php/php_mysql_select_limit.asp)
-    connection.query(
+  connection.query(
       `
       with base as (SELECT 
         p.pid,
@@ -108,7 +74,6 @@ const top_parks = async function (req, res) {
         }
       }
     );
-  }
 };
 
 // Route 3: GET /search_parks

@@ -8,12 +8,19 @@ import {
   Link,
   Slider,
   TextField,
+  Divider,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 import SongCard from "../components/SongCard";
 import { formatDuration } from "../helpers/formatter";
+import LazyTable from "../components/LazyTable";
 const config = require("../config.json");
+
+
+
+// import { Container, , Link } from "@mui/material";
+
 
 export default function SongsPage() {
   const [pageSize, setPageSize] = useState(10);
@@ -107,6 +114,32 @@ export default function SongsPage() {
     // { field: "tempo", headerName: "Tempo" },
     // { field: "key_mode", headerName: "Key" },
     // { field: "explicit", headerName: "Explicit" },
+  ];
+
+
+  const songColumns = [
+    {
+      field: "full_name",
+      headerName: "Park Name",
+      renderCell: (row) => (
+        <Link onClick={() => setSelectedSongId(row.pid)}>{row.full_name}</Link>
+      ), // A Link component is used just for formatting purposes
+    },
+    // {
+    //   field: "album",
+    //   headerName: "Album Title",
+    //   renderCell: (row) => (
+    //     <NavLink to={`/albums/${row.album_id}`}>{row.album}</NavLink>
+    //   ), // A NavLink component is used to create a link to the album page
+    // },
+    {
+      field: "region",
+      headerName: "Region",
+    },
+    {
+      field: "visitor_count",
+      headerName: "Visitor_count",
+    },
   ];
 
   // This component makes uses of the Grid component from MUI (https://mui.com/material-ui/react-grid/).
@@ -369,6 +402,13 @@ export default function SongsPage() {
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         autoHeight
       />
+      <Divider />
+      <h2>Top Parks</h2>
+      <LazyTable
+        route={`http://${config.server_host}:${config.server_port}/top_parks`}
+        columns={songColumns}
+      />
+      <Divider />
     </Container>
   );
 }
