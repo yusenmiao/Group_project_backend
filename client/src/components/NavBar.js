@@ -38,7 +38,7 @@ export default function NavBar() {
         <Toolbar disableGutters>
           <NavText href="/" text="Little Park" isMain />
           <NavText href="/albums" text="Park" />
-          <NavText href="/songs" text="Home" />
+          <NavText href="/home" text="Home" />
         </Toolbar>
       </Container>
     </AppBar>
